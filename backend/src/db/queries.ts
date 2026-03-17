@@ -26,6 +26,9 @@ export const updateUser = async (id: string, data: Partial<NewUser>) => {
     }
   
     const [user] = await db.update(users).set(data).where(eq(users.id, id)).returning();
+      if (!user) {
+          throw new Error(`User with id ${id} not found`);
+        }
     return user;
 };
     
@@ -105,6 +108,9 @@ export const deleteProduct = async (id: string) => {
   }
 
   const [product] = await db.delete(products).where(eq(products.id, id)).returning();
+    if (!product) {
+        throw new Error(`Product with id ${id} not found`);
+    }
   return product;
 };
 
