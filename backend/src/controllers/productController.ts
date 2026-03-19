@@ -28,10 +28,16 @@ export const getMyProducts = async (req: Request, res: Response) => {
   }
 };
 
+const isUuid = (value: string) =>
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+
 // Get single product by ID (public)
 export const getProductById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    if (!id || !isUuid(id as string)) {
+      return res.status(400).json({ error: "Invalid product id" });
+    }
     const product = await queries.getProductById(id as string);
 
     if (!product) return res.status(404).json({ error: "Product not found" });
@@ -77,6 +83,9 @@ export const updateProduct = async (req: Request, res: Response) => {
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const { id } = req.params;
+    if (!id || !isUuid(id as string)) {
+      return res.status(400).json({ error: "Invalid product id" });
+    }
     const { title, description, imageUrl } = req.body;
 
     // Check if product exists and belongs to user
@@ -91,11 +100,24 @@ export const updateProduct = async (req: Request, res: Response) => {
       return;
     }
 
+    const updateData = {
+            ...(typeof title === "string" && title.trim() ? { title: title.trim() } : {}),
+            ...(typeof description === "string" && description.trim() ? { description: description.trim() } : {}),
+            ...(typeof imageUrl === "string" && imageUrl.trim() ? { imageUrl: imageUrl.trim() } : {}),
+          };
+      
+          if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ error: "At least one updatable field is required" });
+          }
+
+          const product = await queries.updateProduct(id as string, updateData);
+/*           
     const product = await queries.updateProduct(id as string, {
       title,
       description,
       imageUrl,
     });
+ */
 
     res.status(200).json(product);
   } catch (error) {
@@ -111,7 +133,9 @@ export const deleteProduct = async (req: Request, res: Response) => {
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const { id } = req.params;
-
+      if (!id || !isUuid(id as string)) {
+            return res.status(400).json({ error: "Invalid product id" });
+      }
     // Check if product exists and belongs to user
     const existingProduct = await queries.getProductById(id as string);
     if (!existingProduct) {
