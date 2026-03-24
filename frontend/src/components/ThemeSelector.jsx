@@ -51,10 +51,15 @@ function ThemeSelector() {
 
   return (
     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn btn-ghost btn-sm gap-1">
+      <button
+        type="button" 
+        tabIndex={0} 
+        aria-label="Theme"
+        className="btn btn-ghost btn-sm gap-1"
+      >
         <PaletteIcon className="size-4" />
         <span className="hidden sm:inline">Theme</span>
-      </div>
+      </button>
 
       <ul
         tabIndex={0}

@@ -7,14 +7,14 @@ import { BrowserRouter } from 'react-router';
 
 
 //Following validation is there in youtube video but not in clerk.com  
-//const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-//if (!PUBLISHABLE_KEY) {
-//  throw new Error("Missing Publishable Key");
-//}
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key");
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ClerkProvider >
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <BrowserRouter>
         <App />
       </BrowserRouter>  
