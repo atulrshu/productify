@@ -3,7 +3,7 @@ import api from "./axios";
 // USERS API
 export const syncUser = async (userData) => {
     // Temporary log to see what is actually being sent
-    console.log("Syncing user with data:", userData);
+    //console.log("Syncing user with data:", userData);
 
     const { data } = await api.post("/users/sync", userData);
     return data;

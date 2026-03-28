@@ -10,15 +10,16 @@ function useUserSync() {
   
   // 1. Use a Ref to track if we've already attempted a sync in this session
   // This prevents the "multiple times" loop error
-  const syncStarted = useRef(false);
+  //const syncStarted = useRef(false);
   
   const { mutate: syncUserMutation, isPending, isSuccess } = useMutation({ mutationFn: syncUser });
 
   useEffect(() => {
     // 2. Only run if Clerk is loaded, user is signed in, and we haven't synced yet
-    if (isSignedIn && user && !isPending && !isSuccess && !syncStarted.current) {
+    //if (isSignedIn && user && !isPending && !isSuccess && !syncStarted.current) {
+    if (isSignedIn && user && !isPending && !isSuccess ) {
       
-      syncStarted.current = true; // Mark as started immediately
+      //syncStarted.current = true; // Mark as started immediately
 
       syncUserMutation({
         email: user.primaryEmailAddress?.emailAddress,
